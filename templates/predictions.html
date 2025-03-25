@@ -1,0 +1,58 @@
+{% extends "layout.html" %}
+{% block title %}Faire ma prédiction{% endblock %}
+
+{% block content %}
+
+<!-- On peut ajouter un style local pour .btn-danger ici,
+     ou le mettre dans layout.html pour l’avoir partout. -->
+<style>
+  .btn-danger {
+    background-color: var(--topchef-white) !important;
+    color: var(--topchef-black) !important;
+    border: 2px solid var(--topchef-white) !important;
+  }
+  .btn-danger:hover {
+    background-color: var(--topchef-black) !important;
+    color: var(--topchef-white) !important;
+  }
+</style>
+
+<h2 class="mb-4">Choisis qui va sortir cette semaine</h2>
+
+<div class="row">
+  {% for c in candidats %}
+    <div class="col-md-4 col-lg-3">
+      <!-- Card sombre + texte blanc -->
+      <div class="card mb-4 bg-dark text-white shadow border-0">
+        {% if c.fields.Image and c.fields.Image|length > 0 %}
+          <img src="{{ c.fields.Image[0].url }}" 
+               class="card-img-top" 
+               alt="{{ c.fields.Name }}" 
+               style="object-fit: cover; height: 200px;">
+        {% else %}
+          <img src="{{ url_for('static', filename='default.jpg') }}" 
+               class="card-img-top" 
+               alt="Default" 
+               style="object-fit: cover; height: 200px;">
+        {% endif %}
+
+        <div class="card-body">
+          <h5 class="card-title">{{ c.fields.Name }}</h5>
+
+          <!-- Formulaire pour voter -->
+          <form method="POST" action="{{ url_for('submit_prediction') }}">
+            <input type="hidden" name="candidate_id" value="{{ c.id }}">
+            <!-- Semaine en dur ou dynamique -->
+            <input type="hidden" name="week" value="1">
+            <button type="submit" class="btn btn-danger mt-2">
+              Je pense qu'il/elle va sortir
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+{% endblock %}
+

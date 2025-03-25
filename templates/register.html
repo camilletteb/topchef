@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+{% block title %}Inscription{% endblock %}
+{% block content %}
+<h2>S'inscrire</h2>
+<!-- Important: enctype ! -->
+<form method="POST" enctype="multipart/form-data">
+  <div class="mb-3">
+    <label for="email" class="form-label">Email</label>
+    <input type="email" class="form-control" id="email" name="email" required>
+  </div>
+  <div class="mb-3">
+    <label for="username" class="form-label">Pseudo</label>
+    <input type="text" class="form-control" id="username" name="username" required>
+  </div>
+  <div class="mb-3">
+    <label for="password" class="form-label">Mot de passe</label>
+    <input type="password" class="form-control" id="password" name="password" required>
+  </div>
+
+  <!-- Ici on remplace le champ URL par un champ fichier -->
+  <div class="mb-3">
+    <label for="photo_file" class="form-label">Photo de profil</label>
+    <input type="file" class="form-control" id="photo_file" name="photo_file">
+  </div>
+
+  <button type="submit" class="btn btn-primary">S'inscrire</button>
+</form>
+{% endblock %}

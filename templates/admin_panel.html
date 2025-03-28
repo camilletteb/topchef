@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+{% block title %}Panel Admin{% endblock %}
+{% block content %}
+<h2 class="mb-4">Panel Admin</h2>
+
+<form method="POST" action="{{ url_for('mark_eliminated', week_number=1, candidate_id='dummy') }}" id="weekForm">
+  <div class="mb-3">
+    <label for="weekNumber" class="form-label">Semaine pour laquelle marquer l'élimination :</label>
+    <input type="number" class="form-control" id="weekNumber" name="week_number" value="1" min="1">
+  </div>
+  <button type="button" class="btn btn-primary" onclick="updateWeek()">Actualiser la semaine</button>
+</form>
+
+<hr>
+
+<div class="row">
+  {% for c in candidats %}
+    <div class="col-6 col-md-3 mb-4">
+      <div class="card bg-dark text-white shadow">
+        {% if c.fields.Image and c.fields.Image|length > 0 %}
+          <img src="{{ c.fields.Image[0].url }}" class="card-img-top" alt="{{ c.fields.Name }}" style="height:200px; object-fit:cover;">
+        {% else %}
+          <img src="{{ url_for('static', filename='default.jpg') }}" class="card-img-top" alt="Default" style="height:200px; object-fit:cover;">
+        {% endif %}
+        <div class="card-body text-center">
+          <h5 class="card-title">{{ c.fields.Name }}</h5>
+          <!-- Formulaire pour marquer ce candidat comme éliminé -->
+          <form method="POST" action="{{ url_for('mark_eliminated', week_number=0, candidate_id=c.id) }}">
+            <!-- On remplace week_number via JavaScript -->
+            <input type="hidden" name="week_number" id="hiddenWeek" value="1">
+            <button type="submit" class="btn btn-danger btn-sm">Marquer comme éliminé</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+<script>
+  // Fonction pour actualiser la valeur de la semaine dans les formulaires du panel admin
+  function updateWeek() {
+    var week = document.getElementById("weekNumber").value;
+    document.getElementById("hiddenWeek").value = week;
+    alert("Semaine mise à jour à " + week + ". Cliquez sur le bouton 'Marquer comme éliminé' pour le candidat concerné.");
+  }
+</script>
+
+{% endblock %}

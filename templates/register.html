@@ -2,7 +2,7 @@
 {% block title %}Inscription{% endblock %}
 {% block content %}
 <h2>S'inscrire</h2>
-<!-- Important: enctype ! -->
+<!-- N'oublie pas l'enctype pour l'upload de fichier -->
 <form method="POST" enctype="multipart/form-data">
   <div class="mb-3">
     <label for="email" class="form-label">Email</label>
@@ -16,11 +16,10 @@
     <label for="password" class="form-label">Mot de passe</label>
     <input type="password" class="form-control" id="password" name="password" required>
   </div>
-
-  <!-- Ici on remplace le champ URL par un champ fichier -->
+  <!-- Nouveau champ pour la photo -->
   <div class="mb-3">
-    <label for="photo_file" class="form-label">Photo de profil</label>
-    <input type="file" class="form-control" id="photo_file" name="photo_file">
+    <label for="photo" class="form-label">Photo (optionnel)</label>
+    <input type="file" class="form-control" id="photo" name="photo" accept="image/*">
   </div>
 
   <button type="submit" class="btn btn-primary">S'inscrire</button>

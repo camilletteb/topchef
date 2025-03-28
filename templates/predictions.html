@@ -1,58 +1,46 @@
 {% extends "layout.html" %}
-{% block title %}Faire ma prédiction{% endblock %}
-
+{% block title %}Predictions - Semaine {{ current_week }}{% endblock %}
 {% block content %}
-
-<!-- On peut ajouter un style local pour .btn-danger ici,
-     ou le mettre dans layout.html pour l’avoir partout. -->
-<style>
-  .btn-danger {
-    background-color: var(--topchef-white) !important;
-    color: var(--topchef-black) !important;
-    border: 2px solid var(--topchef-white) !important;
-  }
-  .btn-danger:hover {
-    background-color: var(--topchef-black) !important;
-    color: var(--topchef-white) !important;
-  }
-</style>
-
-<h2 class="mb-4">Choisis qui va sortir cette semaine</h2>
+<h2 class="mb-4">Tu votes pour la semaine {{ current_week }}</h2>
 
 <div class="row">
   {% for c in candidats %}
-    <div class="col-md-4 col-lg-3">
-      <!-- Card sombre + texte blanc -->
-      <div class="card mb-4 bg-dark text-white shadow border-0">
-        {% if c.fields.Image and c.fields.Image|length > 0 %}
-          <img src="{{ c.fields.Image[0].url }}" 
-               class="card-img-top" 
-               alt="{{ c.fields.Name }}" 
-               style="object-fit: cover; height: 200px;">
-        {% else %}
-          <img src="{{ url_for('static', filename='default.jpg') }}" 
-               class="card-img-top" 
-               alt="Default" 
-               style="object-fit: cover; height: 200px;">
-        {% endif %}
+    <div class="col-6 col-md-3 mb-4">
+      <div class="card bg-dark text-white position-relative shadow">
+        <div class="position-relative">
+          {% if c.fields.Image and c.fields.Image|length > 0 %}
+            <img src="{{ c.fields.Image[0].url }}" class="card-img-top" alt="{{ c.fields.Name }}" style="height:200px; object-fit:cover;">
+          {% else %}
+            <img src="{{ url_for('static', filename='default.jpg') }}" class="card-img-top" alt="Default" style="height:200px; object-fit:cover;">
+          {% endif %}
 
-        <div class="card-body">
+          {# Si le candidat est éliminé, overlay rouge couvrant toute l'image avec une grande croix #}
+          {% if c.fields.Status == 'Éliminé' %}
+            <div style="position:absolute; top:0; left:0; width:100%; height:100%; background-color: rgba(255,0,0,0.6); display: flex; align-items: center; justify-content: center;">
+              <span style="font-size:3rem; color:red;">&#10005;</span>
+            </div>
+          {% elif selected_candidate and c.id == selected_candidate %}
+            {# Si c'est le candidat sélectionné par l'utilisateur, overlay blanc avec une coche #}
+            <div style="position:absolute; top:0; left:0; width:100%; height:100%; background-color: rgba(255,255,255,0.4); display: flex; align-items: center; justify-content: center;">
+              <span style="font-size:3rem; color:green;">&#10003;</span>
+            </div>
+          {% endif %}
+        </div>
+        <div class="card-body text-center">
           <h5 class="card-title">{{ c.fields.Name }}</h5>
-
-          <!-- Formulaire pour voter -->
-          <form method="POST" action="{{ url_for('submit_prediction') }}">
-            <input type="hidden" name="candidate_id" value="{{ c.id }}">
-            <!-- Semaine en dur ou dynamique -->
-            <input type="hidden" name="week" value="1">
-            <button type="submit" class="btn btn-danger mt-2">
-              Je pense qu'il/elle va sortir
-            </button>
-          </form>
+          {# Afficher le bouton de vote si le candidat n'est pas éliminé #}
+          {% if c.fields.Status != 'Éliminé' %}
+            <form method="POST" action="{{ url_for('submit_prediction') }}">
+              <input type="hidden" name="candidate_id" value="{{ c.id }}">
+              <button type="submit" class="btn btn-danger mt-2">
+                Je pense qu'il/elle va sortir
+              </button>
+            </form>
+          {% endif %}
         </div>
       </div>
     </div>
   {% endfor %}
 </div>
-
 {% endblock %}
 

@@ -1,19 +1,31 @@
 {% extends "layout.html" %}
 {% block title %}Accueil{% endblock %}
 {% block content %}
-  <h1 class="mb-4">Bienvenue sur la compet' top chef </h1>
-  <p>Ici, tu peux prédire chaque semaine quel candidat sera éliminé. Tu peux aussi voir le classement général et tenter de terminer le/la premier(e)!.</p>
+  <h1 class="mb-4">Bienvenue sur la compet' Top Chef</h1>
+  <p>
+    Chaque semaine, vote avant mercredi 21h pour prédire quel candidat sera éliminé.
+    Si ta prédiction est exacte lors de l'émission, tu gagnes 1 point.
+  </p>
+  <p>
+    Avant le 16 avril, tu peux aussi sélectionner 3 favoris. 
+    Pour chaque favori qui se qualifie pour la demi-finale, tu gagnes 5 points.
+  </p>
   
-  <p>Pour commencer, tu peux :</p>
-  <ul>
-    <li>Aller sur la page <strong>Prédictions</strong> pour faire ton pronostic de la semaine</li>
-    <li>Consulter le <strong>Classement</strong> pour voir qui mène la danse</li>
-  </ul>
-
-  Bonne chance ... 
-
-  <div class="mt-4">
-    <a href="{{ url_for('predictions') }}" class="btn btn-primary me-2">Faire mes prédictions</a>
-    <a href="{{ url_for('classement') }}" class="btn btn-success">Voir le classement</a>
-  </div>
+  {% if session.get("user_id") %}
+    <p>Pour commencer, tu peux :</p>
+    <ul>
+      <li>Aller sur la page <strong>Prédictions</strong> pour faire ton pronostic de la semaine</li>
+      <li>Consulter le <strong>Classement</strong> pour voir qui mène la danse</li>
+    </ul>
+    <div class="mt-4">
+      <a href="{{ url_for('predictions') }}" class="btn btn-primary me-2">Faire mes prédictions</a>
+      <a href="{{ url_for('classement') }}" class="btn btn-success">Voir le classement</a>
+    </div>
+  {% else %}
+    <p>Pour profiter de toutes les fonctionnalités, inscris-toi ou connecte-toi.</p>
+    <div class="mt-4">
+      <a href="{{ url_for('login') }}" class="btn btn-primary me-2">Se connecter</a>
+      <a href="{{ url_for('register') }}" class="btn btn-success">S'inscrire</a>
+    </div>
+  {% endif %}
 {% endblock %}

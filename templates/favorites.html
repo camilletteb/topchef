@@ -1,0 +1,126 @@
+{% extends "layout.html" %}
+{% block title %}Mes Favoris de la Saison{% endblock %}
+{% block content %}
+
+{% if not locked %}
+  <h2 class="mb-3">Étape 1 : Choisis tes 3 favoris</h2>
+  <p class="mb-4">Attention, tu peux modifier tes favoris jusqu'au 16 avril à 21h.</p>
+  
+  <!-- Bouton Valider en haut -->
+  <form id="favoritesForm" method="POST" action="{{ url_for('favorites_route') }}">
+    <div id="favoritesContainer"></div>
+    <div class="text-end mb-4">
+      <button type="submit" class="btn btn-primary">Valider mes favoris</button>
+    </div>
+  </form>
+
+  <div class="row">
+    {% for c in candidats %}
+      <div class="col-6 col-md-3 mb-4">
+        <div class="card bg-dark text-white position-relative shadow">
+          {% if c.fields.Image and c.fields.Image|length > 0 %}
+            <img src="{{ c.fields.Image[0].url }}" 
+                 class="card-img-top" 
+                 alt="{{ c.fields.Name }}" 
+                 style="height:200px; object-fit:cover;">
+          {% else %}
+            <img src="{{ url_for('static', filename='default.jpg') }}" 
+                 class="card-img-top" 
+                 alt="Default" 
+                 style="height:200px; object-fit:cover;">
+          {% endif %}
+          <!-- Icône cœur cliquable -->
+          {% if c.id in selected_favorites %}
+            <span class="favorite-icon position-absolute top-0 end-0 m-2" 
+                  data-id="{{ c.id }}" 
+                  style="cursor:pointer; font-size:1.5rem; user-select:none; color:red;">♥</span>
+          {% else %}
+            <span class="favorite-icon position-absolute top-0 end-0 m-2" 
+                  data-id="{{ c.id }}" 
+                  style="cursor:pointer; font-size:1.5rem; user-select:none;">♡</span>
+          {% endif %}
+          <div class="card-body text-center">
+            <h5 class="card-title">{{ c.fields.Name }}</h5>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+  <script>
+    // On récupère la liste des favoris pré-sélectionnés envoyée par le backend
+    const selectedFavorites = new Set({{ selected_favorites|tojson }});
+    const maxFavorites = 3;
+
+    document.querySelectorAll('.favorite-icon').forEach(icon => {
+      icon.addEventListener('click', function() {
+        const candidateId = this.getAttribute('data-id');
+        if (selectedFavorites.has(candidateId)) {
+          selectedFavorites.delete(candidateId);
+          this.textContent = "♡";
+          this.style.color = "";
+        } else {
+          if (selectedFavorites.size >= maxFavorites) {
+            alert("Vous ne pouvez sélectionner que 3 favoris maximum.");
+            return;
+          }
+          selectedFavorites.add(candidateId);
+          this.textContent = "♥";
+          this.style.color = "red";
+        }
+        updateFavoritesForm();
+      });
+    });
+
+    function updateFavoritesForm() {
+      const container = document.getElementById('favoritesContainer');
+      container.innerHTML = "";
+      selectedFavorites.forEach(id => {
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = "favorite_ids";
+        input.value = id;
+        container.appendChild(input);
+      });
+    }
+  </script>
+
+{% else %}
+  <!-- Affichage en mode verrouillé -->
+  <h2 class="mb-3">Tes 3 favoris de la saison</h2>
+  <div class="row">
+    {% for fav in favorites %}
+      <div class="col-6 col-md-4 mb-4">
+        <div class="card bg-dark text-white shadow position-relative">
+          {% if fav.fields.Image and fav.fields.Image|length > 0 %}
+            <img src="{{ fav.fields.Image[0].url }}" 
+                 class="card-img-top" 
+                 alt="{{ fav.fields.Name }}" 
+                 style="height:200px; object-fit:cover;">
+          {% else %}
+            <img src="{{ url_for('static', filename='default.jpg') }}" 
+                 class="card-img-top" 
+                 alt="Default" 
+                 style="height:200px; object-fit:cover;">
+          {% endif %}
+          
+          {# Si le favori est éliminé, overlay rouge couvrant toute l'image avec une grande croix #}
+          {% if fav.fields.Status == 'Éliminé' %}
+            <div style="position:absolute; top:0; left:0; width:100%; height:100%; background-color: rgba(255,0,0,0.6); display: flex; align-items: center; justify-content: center;">
+              <span style="font-size:3rem; color:red;">&#10005;</span>
+            </div>
+          {% endif %}
+          
+          <div class="card-body text-center">
+            <h5 class="card-title">{{ fav.fields.Name }}</h5>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+
+{% endblock %}
+
+
+

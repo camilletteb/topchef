@@ -168,12 +168,19 @@
         <!-- Liens à gauche si user connecté -->
         <ul class="navbar-nav me-auto">
           {% if session.get("user_id") %}
+          <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('favorites_route') }}">Mes favoris</a>
+            </li>
             <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('predictions') }}">Predictions</a>
+              <a class="nav-link" href="{{ url_for('predictions') }}">Mon pronostic de la semaine</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('all_pronostics') }}">Les pronostics</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="{{ url_for('classement') }}">Classement</a>
             </li>
+            
           {% endif %}
         </ul>
 

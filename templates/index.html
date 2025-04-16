@@ -2,20 +2,26 @@
 {% block title %}Accueil{% endblock %}
 {% block content %}
   <h1 class="mb-4">Bienvenue sur la compet' Top Chef</h1>
+
   <p>
+
+    Qui sera le grand gagnant de top chef ? Qui sera éliminé ? 
+
+
     Chaque semaine, vote avant mercredi 21h pour prédire quel candidat sera éliminé.
-    Si ta prédiction est exacte lors de l'émission, tu gagnes 1 point.
+    Si ta prédiction est exacte lors de l'émission, tu gagnes 1 point au classement !
   </p>
   <p>
     Avant le 16 avril, tu peux aussi sélectionner 3 favoris. 
-    Pour chaque favori qui se qualifie pour la demi-finale, tu gagnes 5 points.
+    Pour chaque favori qui se qualifie pour les quart de finale, tu gagnes 5 points !
+
   </p>
   
   {% if session.get("user_id") %}
     <p>Pour commencer, tu peux :</p>
     <ul>
       <li>Aller sur la page <strong>Prédictions</strong> pour faire ton pronostic de la semaine</li>
-      <li>Consulter le <strong>Classement</strong> pour voir qui mène la danse</li>
+      <li>Consulter le <strong>Classement</strong> pour voir qui est le premier...</li>
     </ul>
     <div class="mt-4">
       <a href="{{ url_for('predictions') }}" class="btn btn-primary me-2">Faire mes prédictions</a>

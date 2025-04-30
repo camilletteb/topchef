@@ -16,7 +16,7 @@ def favorites_locked():
     """
     Retourne True si la date actuelle est postérieure ou égale au 16 avril 2025 à 21h (heure de Paris)
     """
-    lock_deadline = datetime.strptime("2025-04-16 21:00", "%Y-%m-%d %H:%M")
+    lock_deadline = datetime.strptime("2025-05-02 21:00", "%Y-%m-%d %H:%M")
     lock_deadline = lock_deadline.replace(tzinfo=ZoneInfo("Europe/Paris"))
     now = datetime.now(ZoneInfo("Europe/Paris"))
     return now >= lock_deadline
@@ -97,7 +97,7 @@ def register():
 
         # On ne gère pas l'upload, on choisit toujours une photo aléatoire
         import random
-        random_photos = ["random1.png", "random2.jpeg", "random3.jpeg", "random4.webp", "random5.png", "random6.jpeg", "random7.webp","random8.jpg", "random9.webp"]
+        random_photos = ["random1.png", "random2.jpeg", "random3.jpeg", "random4.webp", "random5.png", "random6.", "random7.webp","random8.jpg", "random9.webp"]
         selected_photo = random.choice(random_photos)
         # On génère une URL absolue pour l'image aléatoire dans static/random_photos
         photo_url = url_for('static', filename='random_photos/' + selected_photo, _external=True)

@@ -16,7 +16,7 @@ def favorites_locked():
     """
     Retourne True si la date actuelle est postérieure ou égale au 16 avril 2025 à 21h (heure de Paris)
     """
-    lock_deadline = datetime.strptime("2025-05-02 21:00", "%Y-%m-%d %H:%M")
+    lock_deadline = datetime.strptime("2025-05-02 22:00", "%Y-%m-%d %H:%M")
     lock_deadline = lock_deadline.replace(tzinfo=ZoneInfo("Europe/Paris"))
     now = datetime.now(ZoneInfo("Europe/Paris"))
     return now >= lock_deadline

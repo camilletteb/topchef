@@ -37,7 +37,7 @@ TABLE_CANDIDATS = "Candidats"
 TABLE_PREDICTIONS = "Predictions"
 
 # Définir la date de début du concours
-CONTEST_START = "2025-03-26 21:00"
+CONTEST_START = "2025-03-26 21:10"
 
 def airtable_headers():
     return {
